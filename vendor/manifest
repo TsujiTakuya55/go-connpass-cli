@@ -8,6 +8,13 @@
 			"branch": "master"
 		},
 		{
+			"importpath": "github.com/TsujiTakuya55/go-connpass/connpass",
+			"repository": "https://github.com/TsujiTakuya55/go-connpass",
+			"revision": "9340038a6eb5d296cf151f43270960bea1936a14",
+			"branch": "master",
+			"path": "/connpass"
+		},
+		{
 			"importpath": "github.com/codegangsta/cli",
 			"repository": "https://github.com/codegangsta/cli",
 			"revision": "0bdeddeeb0f650497d603c4ad7b20cfe685682f6",
