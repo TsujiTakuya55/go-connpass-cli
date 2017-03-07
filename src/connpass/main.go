@@ -4,6 +4,7 @@ import (
 	"connpass/cmd"
 	"gopkg.in/urfave/cli.v1"
 	"os"
+	"fmt"
 )
 
 var connpass *cmd.Connpass
@@ -34,16 +35,17 @@ func main() {
 					Usage:"",
 				},
 			}, globalFlags...),
-			//Before: ,
 			Action:func(c *cli.Context) {
-				cmd.Search(connpass, c.String("keyWord"), c.String("count"))
+				if err := cmd.Search(connpass, c.String("keyWord"), c.String("count")); err != nil {
+					fmt.Errorf("err! \n %s", err)
+				}
 			},
 		},
 		{
 			Name:"list",
 			Aliases:[]string{"l"},
 			Usage:"Displayed in order of opening date and time (default 10)",
-			Flags:append([]cli.Flag{},globalFlags...),
+			Flags:append([]cli.Flag{}, globalFlags...),
 			Action:func(c *cli.Context) {
 				cmd.List(connpass, c.String("count"))
 			},

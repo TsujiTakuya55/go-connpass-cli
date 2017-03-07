@@ -1,42 +1,29 @@
 package cmd
 
 import (
-	"encoding/json"
 	"fmt"
-	"connpass/utils"
-	"github.com/pkg/errors"
-	"net/http"
+	"github.com/TsujiTakuya55/go-connpass/connpass"
 )
 
-func Search(c *Connpass, keyWord string, count string) {
+func Search(c *Connpass, keyWord string, count string) error {
 
-	resp, err := utils.NewResponse(utils.BaseUrl + "?keyword=" + keyWord + "&count=" + count)
+	clinet := connpass.NewClient()
+	connpass, _, err := clinet.Keyword.Get(keyWord)
+
 	if err != nil {
-		errors.Wrap(err, "NewResponse is failed")
-		return
+		return err
 	}
 
-	if resp.StatusCode != http.StatusOK {
-		errors.Wrap(err, "StatusCode is funny")
-		return
-	}
-
-	// 関数を抜ける際に必ずresponseをcloseするようにdeferでcloseを呼ぶ
-	defer resp.Body.Close()
-	if err := json.NewDecoder(resp.Body).Decode(&c); err != nil {
-		errors.Wrap(err, "decode is failed")
-		return
-	}
-
-	for _, v := range c.Events {
-		fmt.Println("タイトル : ", v.Title)
-		fmt.Println("キャッチ : ", v.Catch)
-		fmt.Println("開催会場 : ", v.Place)
-		fmt.Println("URL : ", v.EventUrl)
-		fmt.Println("開催日時 : ", v.StartedAt)
-		fmt.Println("定員 : ", v.Limit)
-		fmt.Println("参加者数 : ", v.Accepted)
-		fmt.Println("補欠者数 : ", v.Waiting)
+	for _, v := range *connpass.Events {
+		fmt.Println("タイトル : ", *v.Title)
+		fmt.Println("キャッチ : ", *v.Catch)
+		fmt.Println("開催会場 : ", *v.Place)
+		fmt.Println("URL : ", *v.EventUrl)
+		fmt.Println("開催日時 : ", *v.StartedAt)
+		fmt.Println("定員 : ", *v.Limit)
+		fmt.Println("参加者数 : ", *v.Accepted)
+		fmt.Println("補欠者数 : ", *v.Waiting)
 		fmt.Println("==================================")
 	}
+	return nil
 }
